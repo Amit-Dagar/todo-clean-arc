@@ -1,0 +1,9 @@
+node_modules
+deploy.sh
+dist
+*.yaml
+*.lock
+*.log
+package-lock.json
+Dockerfile
+docker
