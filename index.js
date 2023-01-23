@@ -18,10 +18,10 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// routes
+// application routes
 app.use("/v1/", catchAsync(require("./Routes")));
 
-// error handler
+// handler errors and send response
 app.use(errorHandler);
 
 // listen to port
