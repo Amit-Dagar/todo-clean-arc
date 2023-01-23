@@ -11,6 +11,7 @@ exports.createItem = (req, res, next) => {
   const { error, value } = schema.validate(req.body);
   if (error) throw createError(400, error.details[0].message);
 
+  req.body = value;
   next();
 };
 
@@ -22,6 +23,7 @@ exports.getItem = (req, res, next) => {
   const { error, value } = schema.validate(req.params);
   if (error) throw createError(400, error.details[0].message);
 
+  req.params = value;
   next();
 };
 
@@ -35,5 +37,6 @@ exports.updateItem = (req, res, next) => {
   const { error, value } = schema.validate({ ...req.params, ...req.body });
   if (error) throw createError(400, error.details[0].message);
 
+  req.body = value;
   next();
 };

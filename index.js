@@ -2,6 +2,7 @@
 // import express and other dependencies
 const express = require("express");
 const app = express();
+const { catchAsync, errorHandler } = require("./Helpers/ExpressHelper");
 
 // dotenv is a zero-dependency module that loads environment variables from a .env file into process.env
 require("dotenv").config();
@@ -18,10 +19,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // routes
-app.use("/v1/", require("./Routes"));
+app.use("/v1/", catchAsync(require("./Routes")));
 
 // error handler
-app.use(require("./Helpers/ExpressHelper").errorHandler);
+app.use(errorHandler);
 
 // listen to port
 app.listen(process.env.PORT, () => {
