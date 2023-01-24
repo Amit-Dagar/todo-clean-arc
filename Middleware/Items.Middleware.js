@@ -1,6 +1,5 @@
 "use strict";
 const joi = require("joi");
-const createError = require("http-errors");
 const expressHelper = require("../Helpers/ExpressHelper");
 
 exports.createItem = (req, res, next) => {
