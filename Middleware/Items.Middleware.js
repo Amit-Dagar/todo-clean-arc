@@ -1,6 +1,7 @@
 "use strict";
 const joi = require("joi");
 const createError = require("http-errors");
+const expressHelper = require("../Helpers/ExpressHelper");
 
 exports.createItem = (req, res, next) => {
   const schema = joi.object({
@@ -8,11 +9,7 @@ exports.createItem = (req, res, next) => {
     completed: joi.boolean().default(false),
   });
 
-  const { error, value } = schema.validate(req.body);
-  if (error) throw createError(400, error.details[0].message);
-
-  req.body = value;
-  next();
+  expressHelper.handleReqBody(req, schema, next);
 };
 
 exports.getItem = (req, res, next) => {
@@ -20,11 +17,7 @@ exports.getItem = (req, res, next) => {
     id: joi.string().required(),
   });
 
-  const { error, value } = schema.validate(req.params);
-  if (error) throw createError(400, error.details[0].message);
-
-  req.params = value;
-  next();
+  expressHelper.handleReqParams(req, schema, next);
 };
 
 exports.updateItem = (req, res, next) => {
@@ -34,9 +27,5 @@ exports.updateItem = (req, res, next) => {
     completed: joi.boolean().default(false),
   });
 
-  const { error, value } = schema.validate({ ...req.params, ...req.body });
-  if (error) throw createError(400, error.details[0].message);
-
-  req.body = value;
-  next();
+  expressHelper.handleReqParamsAndBody(req, schema, next);
 };
