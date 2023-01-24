@@ -9,13 +9,15 @@ exports.catchAsync = (fn) => (req, res, next) => {
 // errorHandler: handle errors of entire application
 exports.errorHandler = (err, req, res, next) => {
   console.log("🔴 Error: ", err);
-  res.status(500).send({ error: err.message });
+  res
+    .status(err.status || 500)
+    .send({ error: err.message || "Internal Server Error." });
 };
 
 // handle req body
 exports.handleReqBody = (req, schema, next) => {
   const { error, value } = schema.validate(req.body);
-  if (error) throw createError(400, error.details[0].message);
+  if (error) throw createError.BadRequest(error.details[0].message);
 
   req.body = value;
   next();
@@ -24,7 +26,7 @@ exports.handleReqBody = (req, schema, next) => {
 // handle req params
 exports.handleReqParams = (req, schema, next) => {
   const { error, value } = schema.validate(req.params);
-  if (error) throw createError(400, error.details[0].message);
+  if (error) throw createError.BadRequest(error.details[0].message);
 
   req.params = value;
   next();
@@ -33,7 +35,7 @@ exports.handleReqParams = (req, schema, next) => {
 // handle req query
 exports.handleReqQuery = (req, schema, next) => {
   const { error, value } = schema.validate(req.query);
-  if (error) throw createError(400, error.details[0].message);
+  if (error) throw createError.BadRequest(error.details[0].message);
 
   req.query = value;
   next();
@@ -42,7 +44,7 @@ exports.handleReqQuery = (req, schema, next) => {
 // handle req params and body
 exports.handleReqParamsAndBody = (req, schema, next) => {
   const { error, value } = schema.validate({ ...req.params, ...req.body });
-  if (error) throw createError(400, error.details[0].message);
+  if (error) throw createError.BadRequest(error.details[0].message);
 
   req.body = value;
   next();
